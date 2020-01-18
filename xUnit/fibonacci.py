@@ -2,17 +2,20 @@
 
 import sys
 
-def fibonacci(n, l):
+def fibonacci(arguments):
+    if len(arguments) == 0:
+        raise RuntimeError("Not enough arguments, usage: fibonacci <start> [<length>]")
+
+
     # Casting to int to showcase the unit test functionality
-    start = int(n)
-    length = int(l)
+    start = int(arguments[0])
+    length = int(arguments[1]) if len(arguments) > 1 else 10
 
     if length == 0:
-        print('Length should be more than 0')
+        raise RuntimeError("Length should be more than 0")
         return
 
     results = getSequence(start, length)
-    print(results)
     writeToFile(results)
 
 def getSequence(start, length):
@@ -38,14 +41,10 @@ def getSequence(start, length):
 
 def writeToFile(seq):
     with open('fib_sequence.txt', "w") as file:
-        for i in seq:
-            file.write(str(i) + '\n')
-
+        string = ",".join(str(i) for i in seq)
+        file.write(string)
         file.close()
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print('Not enough arguments, usage: fibonacci.py <start> [<count>]')
-    else:
-        # Get start and length values, length defaults to 10
-        fibonacci(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else 10)
+    # Remove first argument which is the filename
+    fibonacci(sys.argv[1:])
